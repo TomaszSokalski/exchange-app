@@ -59,7 +59,47 @@ class ExchangeController extends AbstractFOSRestController
     #[Rest\Get('/history', name: 'app_show_history')]
     public function showHistory(): View
     {
-        return View::create($this->historyRepository->findAll(), Response::HTTP_OK);
+        return View::create(
+            $this->historyRepository->findAll(),
+            Response::HTTP_OK);
+    }
+
+    #[Rest\Post('/history', name: 'app_show_by_params_history')]
+    #[Rest\QueryParam(
+        name: 'page',
+        requirements: new Assert\Type(['type' => 'string']),
+        default: 1,
+        strict: true,
+        nullable: false)]
+    #[Rest\QueryParam(
+        name: 'limit',
+        requirements: new Assert\Type(['type' => 'string']),
+        strict: true,
+        nullable: false)]
+    #[Rest\QueryParam(
+        name: 'sortBy',
+        requirements: new Assert\Type(['type' => 'string']),
+        strict: true,
+        nullable: false)]
+    #[Rest\QueryParam(
+        name: 'sortOrder',
+        requirements: new Assert\Choice(choices: ['asc', 'desc']),
+        default: 'asc',
+        allowBlank: false)]
+    public function showHistoryByParams(
+        string $page,
+        string $limit,
+        string $sortBy,
+        string $sortOrder
+    ): View {
+        return View::create(
+            $this->historyRepository->sortAndPaginateBy(
+                $page,
+                $limit,
+                $sortBy,
+                $sortOrder
+            ) ,
+            Response::HTTP_OK);
     }
 
     private function swapValuesWithoutExtraVariable(&$a, &$b): void

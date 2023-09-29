@@ -29,4 +29,14 @@ class HistoryRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function sortAndPaginateBy($page, $limit, $sortBy, $sortOrder): array
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->orderBy('h.' . $sortBy, $sortOrder)
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
 }
