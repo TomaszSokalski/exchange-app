@@ -1,0 +1,11 @@
+# Read the documentation: https://fosrestbundle.readthedocs.io/en/3.x/
+fos_rest:
+    param_fetcher_listener:  force
+    body_listener:
+        enabled: true
+        default_format: json
+    view:
+        view_response_listener:  true
+    format_listener:
+        rules:
+            - { path: ^/, prefer_extension: true, fallback_format: json, priorities: [ json ] }
