@@ -56,6 +56,12 @@ class ExchangeController extends AbstractFOSRestController
         return View::create('', Response::HTTP_NO_CONTENT);
     }
 
+    #[Rest\Get('/history', name: 'app_show_history')]
+    public function showHistory(): View
+    {
+        return View::create($this->historyRepository->findAll(), Response::HTTP_OK);
+    }
+
     private function swapValuesWithoutExtraVariable(&$a, &$b): void
     {
         [$a, $b] = [$b, $a];
